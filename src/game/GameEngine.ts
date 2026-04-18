@@ -69,6 +69,10 @@ export class GameEngine {
     this.player.vx = 0;
     this.player.vy = 0;
     this.player.gravityFlipped = false;
+    
+    // Snap camera so it doesn't smoothly pan across the whole map on a new level
+    this.camera.x = this.player.x - this.canvas.width / 2 + this.player.width / 2;
+    this.camera.y = this.player.y - this.canvas.height / 2 + this.player.height / 2;
   }
 
   public start() {

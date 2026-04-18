@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { GameEngine } from '../game/GameEngine';
-import { LevelManager } from '../game/LevelManager';
+import { GAME_LEVELS } from '../game/LevelManager';
 
 export const GameCanvas: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const engineRef = useRef<GameEngine | null>(null);
-  const levelManagerRef = useRef<LevelManager>(new LevelManager());
+  
   const [gameState, setGameState] = useState<'playing' | 'dead' | 'won' | 'completed'>('playing');
+  const [levelIndex, setLevelIndex] = useState(0);
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -24,7 +25,7 @@ export const GameCanvas: React.FC = () => {
     const engine = new GameEngine(canvas);
     engineRef.current = engine;
 
-    engine.loadLevel(levelManagerRef.current.getCurrentLevel());
+    engine.loadLevel(GAME_LEVELS[levelIndex]);
 
     engine.onDie = () => setGameState('dead');
     engine.onWin = () => setGameState('won');
@@ -35,20 +36,33 @@ export const GameCanvas: React.FC = () => {
       engine.stop();
       window.removeEventListener('resize', resize);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // When levelIndex changes, load the new level!
+  useEffect(() => {
+    if (engineRef.current && gameState === 'playing') {
+      engineRef.current.loadLevel(GAME_LEVELS[levelIndex]);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [levelIndex]);
 
   const handleRestart = (nextContext: boolean) => {
     if (engineRef.current) {
       if (nextContext) {
-        const hasNext = levelManagerRef.current.nextLevel();
-        if (!hasNext) {
+        if (levelIndex < GAME_LEVELS.length - 1) {
+          const nextIdx = levelIndex + 1;
+          setLevelIndex(nextIdx);
+          setGameState('playing');
+        } else {
           setGameState('completed');
           engineRef.current.stop();
-          return;
         }
+      } else {
+        // Reboot same level
+        setGameState('playing');
+        engineRef.current.loadLevel(GAME_LEVELS[levelIndex]);
       }
-      setGameState('playing');
-      engineRef.current.loadLevel(levelManagerRef.current.getCurrentLevel());
     }
   };
 
@@ -60,24 +74,24 @@ export const GameCanvas: React.FC = () => {
       />
       
       {gameState === 'dead' && (
-        <div className="screen-container glass-panel" style={{ background: 'rgba(255, 0, 0, 0.1)' }}>
-          <h1 className="neon-title" style={{ color: '#ff00ea', textShadow: '0 0 20px #ff00ea' }}>SYSTEM FAILURE</h1>
-          <button className="neon-button" style={{ marginTop: '2rem' }} onClick={() => handleRestart(false)}>REBOOT</button>
+        <div className="screen-container glass-panel" style={{ background: 'rgba(0, 0, 0, 0.5)' }}>
+          <h1 className="mario-title" style={{ color: '#ff3333' }}>GAME OVER</h1>
+          <button className="mario-button" style={{ marginTop: '2rem' }} onClick={() => handleRestart(false)}>TRY AGAIN</button>
         </div>
       )}
 
       {gameState === 'won' && (
-        <div className="screen-container glass-panel" style={{ background: 'rgba(0, 255, 102, 0.1)' }}>
-          <h1 className="neon-title" style={{ color: '#00ff66', textShadow: '0 0 20px #00ff66' }}>ACCESS GRANTED</h1>
-          <button className="neon-button" style={{ marginTop: '2rem', borderColor: '#00ff66', color: '#00ff66' }} onClick={() => handleRestart(true)}>NEXT LEVEL</button>
+        <div className="screen-container glass-panel" style={{ background: 'rgba(0, 0, 0, 0.5)' }}>
+          <h1 className="mario-title" style={{ color: '#ffcc00' }}>LEVEL CLEAR!</h1>
+          <button className="mario-button" style={{ marginTop: '2rem' }} onClick={() => handleRestart(true)}>NEXT LEVEL</button>
         </div>
       )}
 
       {gameState === 'completed' && (
-        <div className="screen-container glass-panel" style={{ background: 'rgba(0, 255, 255, 0.1)' }}>
-          <h1 className="neon-title" style={{ color: '#00f3ff', textShadow: '0 0 20px #00f3ff' }}>SYSTEM CONQUERED</h1>
-          <p style={{ color: '#fff', fontSize: '1.2rem', marginTop: '1rem' }}>You have completed all levels!</p>
-          <button className="neon-button" style={{ marginTop: '2rem', borderColor: '#00f3ff', color: '#00f3ff' }} onClick={() => { window.location.reload(); }}>PLAY AGAIN</button>
+        <div className="screen-container glass-panel" style={{ background: 'rgba(0, 0, 0, 0.5)' }}>
+          <h1 className="mario-title" style={{ color: '#ffcc00' }}>YOU BEAT THE GAME!</h1>
+          <p style={{ color: '#fff', fontSize: '1.2rem', marginTop: '1rem', textShadow: '2px 2px 0 #000', fontWeight: 'bold' }}>Thank you for playing!</p>
+          <button className="mario-button" style={{ marginTop: '2rem' }} onClick={() => { window.location.reload(); }}>PLAY AGAIN</button>
         </div>
       )}
     </>
