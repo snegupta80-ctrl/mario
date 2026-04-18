@@ -235,6 +235,62 @@ export class GameEngine {
     this.ctx.shadowBlur = 0;
   }
 
+  private drawFunnyHuman(x: number, y: number, w: number, h: number, color: string, vx: number, grounded: boolean, flipped: boolean) {
+    this.ctx.save();
+    
+    this.ctx.shadowBlur = 15;
+    this.ctx.shadowColor = color;
+    this.ctx.strokeStyle = color;
+    this.ctx.fillStyle = color;
+    this.ctx.lineWidth = 2;
+
+    this.ctx.translate(x + w / 2, y + h / 2);
+    if (flipped) {
+      this.ctx.scale(1, -1);
+    }
+    
+    const time = performance.now() / 150;
+    const isMoving = Math.abs(vx) > 10;
+    let swing = 0;
+    if (!grounded) {
+      swing = Math.PI / 4; 
+    } else if (isMoving) {
+      swing = Math.sin(time) * (Math.PI / 3); 
+    }
+    
+    this.ctx.beginPath();
+    const headX = 0;
+    const headY = -h/2 + 8;
+    this.ctx.arc(headX, headY, 6, 0, Math.PI * 2);
+
+    this.ctx.moveTo(0, headY + 6);
+    this.ctx.lineTo(0, h/2 - 8);
+    
+    const armY = headY + 10;
+    this.ctx.moveTo(0, armY);
+    this.ctx.lineTo(Math.sin(swing) * 12, armY + 8);
+    this.ctx.moveTo(0, armY);
+    this.ctx.lineTo(Math.sin(swing) * -12, armY + 8);
+
+    const legY = h/2 - 8;
+    this.ctx.moveTo(0, legY);
+    this.ctx.lineTo(Math.sin(swing) * -12, h/2 + 4);
+    this.ctx.moveTo(0, legY);
+    this.ctx.lineTo(Math.sin(swing) * 12, h/2 + 4);
+
+    this.ctx.stroke();
+
+    this.ctx.beginPath();
+    this.ctx.arc(headX - 2, headY - 2, 1, 0, Math.PI*2);
+    this.ctx.arc(headX + 2, headY - 2, 1, 0, Math.PI*2);
+    this.ctx.fill();
+    this.ctx.beginPath();
+    this.ctx.arc(headX, headY + 1, 3, 0, Math.PI);
+    this.ctx.stroke();
+
+    this.ctx.restore();
+  }
+
   private render() {
     // Clear screen
     this.ctx.fillStyle = '#050510'; // Deep dark background
@@ -260,7 +316,10 @@ export class GameEngine {
 
     // Draw Player
     const playerColor = this.player.gravityFlipped ? '#9d00ff' : '#ffffff';
-    this.drawRectWithGlow(this.player, playerColor, 15);
+    this.drawFunnyHuman(
+      this.player.x, this.player.y, this.player.width, this.player.height,
+      playerColor, this.player.vx, this.player.grounded, this.player.gravityFlipped
+    );
 
     this.ctx.restore();
   }
