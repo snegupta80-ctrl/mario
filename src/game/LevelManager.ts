@@ -23,23 +23,32 @@ export const GAME_LEVELS: LevelData[] = [
   },
   // Level 2: Intermediate
   {
-    width: 2500,
+    width: 2000,
     height: 1000,
     spawn: { x: 100, y: 500 },
     blocks: [
-      { x: 0, y: 700, width: 2500, height: 100, type: BlockType.WALL }, 
-      { x: 0, y: 0, width: 2500, height: 100, type: BlockType.WALL },   
+      { x: 0, y: 700, width: 2000, height: 100, type: BlockType.WALL }, 
+      { x: 0, y: 0, width: 2000, height: 100, type: BlockType.WALL },   
       { x: 0, y: 100, width: 50, height: 600, type: BlockType.WALL },     
-      { x: 400, y: 700, width: 600, height: 100, type: BlockType.WALL }, 
-      { x: 400, y: 668, width: 600, height: 32, type: BlockType.SPIKE_UP },
-      { x: 500, y: 200, width: 400, height: 50, type: BlockType.WALL },
-      { x: 600, y: 250, width: 200, height: 32, type: BlockType.SPIKE_DOWN },
-      { x: 1100, y: 500, width: 100, height: 200, type: BlockType.WALL },
-      { x: 1300, y: 400, width: 100, height: 300, type: BlockType.WALL },
-      { x: 1500, y: 668, width: 400, height: 32, type: BlockType.SPIKE_UP },
-      { x: 1500, y: 700, width: 400, height: 100, type: BlockType.WALL },
-      { x: 1600, y: 150, width: 200, height: 50, type: BlockType.WALL },
-      { x: 2300, y: 600, width: 64, height: 100, type: BlockType.PORTAL }
+      
+      // First obstacle: small spike block
+      { x: 400, y: 668, width: 150, height: 32, type: BlockType.SPIKE_UP },
+      
+      // Floating platform above the spikes
+      { x: 400, y: 500, width: 150, height: 50, type: BlockType.WALL },
+
+      // Second obstacle: wall forcing a flip or big jump
+      { x: 800, y: 500, width: 100, height: 200, type: BlockType.WALL },
+      
+      // Spikes on the ceiling directly above the wall
+      { x: 800, y: 100, width: 100, height: 32, type: BlockType.SPIKE_DOWN },
+
+      // End zone stairs
+      { x: 1200, y: 600, width: 100, height: 100, type: BlockType.WALL },
+      { x: 1300, y: 500, width: 100, height: 200, type: BlockType.WALL },
+      { x: 1400, y: 400, width: 300, height: 300, type: BlockType.WALL },
+
+      { x: 1550, y: 300, width: 64, height: 100, type: BlockType.PORTAL }
     ]
   },
   // Level 3: Advanced

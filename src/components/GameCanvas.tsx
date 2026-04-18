@@ -36,16 +36,7 @@ export const GameCanvas: React.FC = () => {
       engine.stop();
       window.removeEventListener('resize', resize);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // When levelIndex changes, load the new level!
-  useEffect(() => {
-    if (engineRef.current && gameState === 'playing') {
-      engineRef.current.loadLevel(GAME_LEVELS[levelIndex]);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [levelIndex]);
 
   const handleRestart = (nextContext: boolean) => {
     if (engineRef.current) {
@@ -54,6 +45,8 @@ export const GameCanvas: React.FC = () => {
           const nextIdx = levelIndex + 1;
           setLevelIndex(nextIdx);
           setGameState('playing');
+          // Synchronously load level to bypass any React batching delays
+          engineRef.current.loadLevel(GAME_LEVELS[nextIdx]);
         } else {
           setGameState('completed');
           engineRef.current.stop();
@@ -72,6 +65,28 @@ export const GameCanvas: React.FC = () => {
         ref={canvasRef} 
         style={{ display: 'block', width: '100%', height: '100%' }}
       />
+      
+      {gameState === 'playing' && (
+        <div style={{
+          position: 'absolute',
+          top: '20px',
+          right: '20px',
+          background: 'rgba(0,0,0,0.6)',
+          padding: '15px',
+          borderRadius: '8px',
+          color: '#fff',
+          fontFamily: "'Outfit', sans-serif",
+          boxShadow: '4px 4px 0 rgba(0,0,0,0.8)',
+          border: '3px solid #000',
+          pointerEvents: 'none'
+        }}>
+          <h3 style={{ marginBottom: '10px', color: '#FDD835', textShadow: '2px 2px 0 #000', textTransform: 'uppercase', letterSpacing: '1px' }}>CONTROLS</h3>
+          <p style={{ marginBottom: '5px', textShadow: '1px 1px 0 #000' }}><strong>A / D</strong> : Move</p>
+          <p style={{ marginBottom: '5px', textShadow: '1px 1px 0 #000' }}><strong>W / Up</strong> : Jump</p>
+          <p style={{ marginBottom: '5px', textShadow: '1px 1px 0 #000' }}><strong>Space</strong> : Flip Gravity</p>
+          <p style={{ marginTop: '10px', color: '#43B047', fontWeight: 800, textShadow: '1px 1px 0 #000' }}><strong>TAB + J</strong> : Long Jump</p>
+        </div>
+      )}
       
       {gameState === 'dead' && (
         <div className="screen-container glass-panel" style={{ background: 'rgba(229, 37, 33, 0.4)' }}>

@@ -6,6 +6,8 @@ interface InputState {
   right: boolean;
   jump: boolean;
   gravitySwitch: boolean;
+  tab: boolean;
+  j: boolean;
 }
 
 export class GameEngine {
@@ -36,8 +38,8 @@ export class GameEngine {
     grounded: false,
   };
 
-  private input: InputState = { left: false, right: false, jump: false, gravitySwitch: false };
-  private prevInput: InputState = { left: false, right: false, jump: false, gravitySwitch: false };
+  private input: InputState = { left: false, right: false, jump: false, gravitySwitch: false, tab: false, j: false };
+  private prevInput: InputState = { left: false, right: false, jump: false, gravitySwitch: false, tab: false, j: false };
   
   // Physics Constants
   private gravity = 1500;
@@ -87,6 +89,8 @@ export class GameEngine {
   }
 
   private handleKeyDown = (e: KeyboardEvent) => {
+    if (e.code === 'Tab') { e.preventDefault(); this.input.tab = true; }
+    if (e.code === 'KeyJ') this.input.j = true;
     if (e.code === 'ArrowLeft' || e.code === 'KeyA') this.input.left = true;
     if (e.code === 'ArrowRight' || e.code === 'KeyD') this.input.right = true;
     if (e.code === 'ArrowUp' || e.code === 'KeyW') this.input.jump = true;
@@ -94,6 +98,8 @@ export class GameEngine {
   };
 
   private handleKeyUp = (e: KeyboardEvent) => {
+    if (e.code === 'Tab') this.input.tab = false;
+    if (e.code === 'KeyJ') this.input.j = false;
     if (e.code === 'ArrowLeft' || e.code === 'KeyA') this.input.left = false;
     if (e.code === 'ArrowRight' || e.code === 'KeyD') this.input.right = false;
     if (e.code === 'ArrowUp' || e.code === 'KeyW') this.input.jump = false;
@@ -130,9 +136,19 @@ export class GameEngine {
     }
 
     // Jump
-    if (this.input.jump && !this.prevInput.jump && this.player.grounded) {
-      this.player.vy = this.player.gravityFlipped ? this.jumpPower : -this.jumpPower;
-      this.player.grounded = false;
+    const justPressedJump = this.input.jump && !this.prevInput.jump;
+    const justPressedJ = this.input.j && !this.prevInput.j;
+
+    if (this.player.grounded) {
+      if (this.input.tab && justPressedJ) {
+        // High Long Jump
+        this.player.vy = this.player.gravityFlipped ? this.jumpPower * 1.6 : -this.jumpPower * 1.6;
+        this.player.grounded = false;
+      } else if (justPressedJump) {
+        // Normal Jump
+        this.player.vy = this.player.gravityFlipped ? this.jumpPower : -this.jumpPower;
+        this.player.grounded = false;
+      }
     }
 
     // Apply Gravity
