@@ -238,12 +238,8 @@ export class GameEngine {
   private drawFunnyHuman(x: number, y: number, w: number, h: number, color: string, vx: number, grounded: boolean, flipped: boolean) {
     this.ctx.save();
     
-    this.ctx.shadowBlur = 15;
+    this.ctx.shadowBlur = 10;
     this.ctx.shadowColor = color;
-    this.ctx.strokeStyle = color;
-    this.ctx.fillStyle = color;
-    this.ctx.lineWidth = 2;
-
     this.ctx.translate(x + w / 2, y + h / 2);
     if (flipped) {
       this.ctx.scale(1, -1);
@@ -251,42 +247,97 @@ export class GameEngine {
     
     const time = performance.now() / 150;
     const isMoving = Math.abs(vx) > 10;
-    let swing = 0;
+    
+    // Legs & Arms swinging
+    let leftLegX = -6;
+    let rightLegX = 6;
+    let leftArmX = -12;
+    let rightArmX = 12;
+
     if (!grounded) {
-      swing = Math.PI / 4; 
+      leftLegX -= 6;
+      rightLegX += 6;
+      leftArmX -= 8;
+      rightArmX += 8;
     } else if (isMoving) {
-      swing = Math.sin(time) * (Math.PI / 3); 
+      const wiggle = Math.sin(time) * 8;
+      leftLegX += wiggle;
+      rightLegX -= wiggle;
+      leftArmX += wiggle * 0.8;
+      rightArmX -= wiggle * 0.8;
     }
-    
+
+    this.ctx.lineWidth = 6;
+    this.ctx.lineCap = 'round';
+    this.ctx.strokeStyle = color;
+
+    // Legs
+    const legY = h / 2 - 2;
     this.ctx.beginPath();
-    const headX = 0;
-    const headY = -h/2 + 8;
-    this.ctx.arc(headX, headY, 6, 0, Math.PI * 2);
-
-    this.ctx.moveTo(0, headY + 6);
-    this.ctx.lineTo(0, h/2 - 8);
-    
-    const armY = headY + 10;
-    this.ctx.moveTo(0, armY);
-    this.ctx.lineTo(Math.sin(swing) * 12, armY + 8);
-    this.ctx.moveTo(0, armY);
-    this.ctx.lineTo(Math.sin(swing) * -12, armY + 8);
-
-    const legY = h/2 - 8;
-    this.ctx.moveTo(0, legY);
-    this.ctx.lineTo(Math.sin(swing) * -12, h/2 + 4);
-    this.ctx.moveTo(0, legY);
-    this.ctx.lineTo(Math.sin(swing) * 12, h/2 + 4);
-
+    this.ctx.moveTo(-6, 8);
+    this.ctx.lineTo(leftLegX, legY);
     this.ctx.stroke();
 
     this.ctx.beginPath();
-    this.ctx.arc(headX - 2, headY - 2, 1, 0, Math.PI*2);
-    this.ctx.arc(headX + 2, headY - 2, 1, 0, Math.PI*2);
+    this.ctx.moveTo(6, 8);
+    this.ctx.lineTo(rightLegX, legY);
+    this.ctx.stroke();
+
+    // Arms
+    const armY = 2;
+    this.ctx.beginPath();
+    this.ctx.moveTo(-12, armY);
+    this.ctx.lineTo(leftArmX, armY + (!grounded ? -4 : 8));
+    this.ctx.stroke();
+
+    this.ctx.beginPath();
+    this.ctx.moveTo(12, armY);
+    this.ctx.lineTo(rightArmX, armY + (!grounded ? -4 : 8));
+    this.ctx.stroke();
+
+    // Body (big bulky ball)
+    this.ctx.beginPath();
+    this.ctx.arc(0, 0, 14, 0, Math.PI * 2);
+    this.ctx.fillStyle = color;
+    this.ctx.fill();
+    
+    // Googly Eyes
+    this.ctx.shadowBlur = 0;
+    this.ctx.fillStyle = '#ffffff';
+    this.ctx.beginPath();
+    this.ctx.arc(-5, -4, 4, 0, Math.PI * 2);
     this.ctx.fill();
     this.ctx.beginPath();
-    this.ctx.arc(headX, headY + 1, 3, 0, Math.PI);
+    this.ctx.arc(5, -4, 4, 0, Math.PI * 2);
+    this.ctx.fill();
+
+    // Pupils
+    this.ctx.fillStyle = '#000000';
+    let lookX = 0;
+    if (vx > 10) lookX = 1.5;
+    else if (vx < -10) lookX = -1.5;
+
+    this.ctx.beginPath();
+    this.ctx.arc(-5 + lookX, -4, 2, 0, Math.PI * 2);
+    this.ctx.fill();
+    this.ctx.beginPath();
+    this.ctx.arc(5 + lookX, -4, 2, 0, Math.PI * 2);
+    this.ctx.fill();
+
+    // Big goofy smile
+    this.ctx.beginPath();
+    this.ctx.strokeStyle = '#000000';
+    this.ctx.lineWidth = 1.5;
+    this.ctx.arc(0, 2, 6, 0.2, Math.PI - 0.2); 
     this.ctx.stroke();
+
+    // Funny tongue when jumping
+    if (!grounded) {
+      this.ctx.fillStyle = '#ff66aa';
+      this.ctx.beginPath();
+      this.ctx.arc(0, 7, 3, 0, Math.PI);
+      this.ctx.fill();
+    }
 
     this.ctx.restore();
   }
