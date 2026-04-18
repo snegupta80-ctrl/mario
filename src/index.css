@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap');
+
+:root {
+  --font-family: 'Outfit', sans-serif;
+  --bg-color: #050510;
+  --text-color: #ffffff;
+  
+  --neon-blue: #00f3ff;
+  --neon-pink: #ff00ea;
+  --neon-green: #00ff66;
+  --neon-purple: #9d00ff;
+  
+  --glass-bg: rgba(10, 10, 20, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--font-family);
+  overflow: hidden;
+}
+
+#root {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* UI Elements */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+.neon-title {
+  font-size: 4rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 
+    0 0 5px #fff,
+    0 0 10px #fff,
+    0 0 20px var(--neon-blue),
+    0 0 40px var(--neon-blue),
+    0 0 80px var(--neon-blue);
+  animation: flicker 4s infinite alternate;
+}
+
+@keyframes flicker {
+  0%, 18%, 22%, 25%, 53%, 57%, 100% {
+    text-shadow: 
+      0 0 5px #fff,
+      0 0 10px #fff,
+      0 0 20px var(--neon-blue),
+      0 0 40px var(--neon-blue),
+      0 0 80px var(--neon-blue);
+  }
+  20%, 24%, 55% {       
+    text-shadow: none;
+  }
+}
+
+.neon-button {
+  background: transparent;
+  color: var(--neon-pink);
+  font-family: var(--font-family);
+  font-size: 1.5rem;
+  font-weight: 600;
+  padding: 12px 32px;
+  border: 2px solid var(--neon-pink);
+  border-radius: 8px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 10px var(--neon-pink), inset 0 0 10px var(--neon-pink);
+  text-shadow: 0 0 5px var(--neon-pink);
+}
+
+.neon-button:hover {
+  background: var(--neon-pink);
+  color: #000;
+  box-shadow: 0 0 20px var(--neon-pink), inset 0 0 20px var(--neon-pink);
+  text-shadow: none;
+}
+
+.screen-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+}
+
+.hud {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  display: flex;
+  justify-content: space-between;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.hud-element {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--neon-green);
+  text-shadow: 0 0 10px var(--neon-green);
+}
