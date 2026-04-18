@@ -33,22 +33,20 @@ export const GAME_LEVELS: LevelData[] = [
       
       // First obstacle: small spike block
       { x: 400, y: 668, width: 150, height: 32, type: BlockType.SPIKE_UP },
-      
-      // Floating platform above the spikes
-      { x: 400, y: 500, width: 150, height: 50, type: BlockType.WALL },
 
-      // Second obstacle: wall forcing a flip or big jump
-      { x: 800, y: 500, width: 100, height: 200, type: BlockType.WALL },
-      
-      // Spikes on the ceiling directly above the wall
-      { x: 800, y: 100, width: 100, height: 32, type: BlockType.SPIKE_DOWN },
+      // Small pillars from start to end for jumping
+      { x: 200, y: 685, width: 50, height: 15, type: BlockType.WALL },
+      { x: 350, y: 685, width: 50, height: 15, type: BlockType.WALL },
+      { x: 500, y: 685, width: 50, height: 15, type: BlockType.WALL },
+      { x: 650, y: 685, width: 50, height: 15, type: BlockType.WALL },
+      { x: 800, y: 685, width: 50, height: 15, type: BlockType.WALL },
+      { x: 950, y: 685, width: 50, height: 15, type: BlockType.WALL },
+      { x: 1100, y: 685, width: 50, height: 15, type: BlockType.WALL },
+      { x: 1250, y: 685, width: 50, height: 15, type: BlockType.WALL },
+      { x: 1400, y: 685, width: 50, height: 15, type: BlockType.WALL },
+      { x: 1550, y: 685, width: 50, height: 15, type: BlockType.WALL },
 
-      // End zone stairs
-      { x: 1200, y: 600, width: 100, height: 100, type: BlockType.WALL },
-      { x: 1300, y: 500, width: 100, height: 200, type: BlockType.WALL },
-      { x: 1400, y: 400, width: 300, height: 300, type: BlockType.WALL },
-
-      { x: 1550, y: 300, width: 64, height: 100, type: BlockType.PORTAL }
+      { x: 1700, y: 300, width: 64, height: 100, type: BlockType.PORTAL }
     ]
   },
   // Level 3: Advanced
