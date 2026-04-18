@@ -2,16 +2,16 @@
 
 :root {
   --font-family: 'Outfit', sans-serif;
-  --bg-color: #050510;
+  --bg-color: #5c94fc;
   --text-color: #ffffff;
   
-  --neon-blue: #00f3ff;
-  --neon-pink: #ff00ea;
-  --neon-green: #00ff66;
-  --neon-purple: #9d00ff;
+  --mario-red: #E52521;
+  --mario-green: #43B047;
+  --mario-blue: #5c94fc;
+  --mario-gold: #FDD835;
   
-  --glass-bg: rgba(10, 10, 20, 0.6);
-  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-bg: rgba(255, 255, 255, 0.8);
+  --glass-border: rgba(0, 0, 0, 0.2);
 }
 
 * {
@@ -48,57 +48,33 @@ body {
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
 }
 
-.neon-title {
+.mario-title {
   font-size: 4rem;
   font-weight: 800;
   text-transform: uppercase;
   color: #fff;
-  text-shadow: 
-    0 0 5px #fff,
-    0 0 10px #fff,
-    0 0 20px var(--neon-blue),
-    0 0 40px var(--neon-blue),
-    0 0 80px var(--neon-blue);
-  animation: flicker 4s infinite alternate;
+  text-shadow: 4px 4px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
+  letter-spacing: 2px;
 }
 
-@keyframes flicker {
-  0%, 18%, 22%, 25%, 53%, 57%, 100% {
-    text-shadow: 
-      0 0 5px #fff,
-      0 0 10px #fff,
-      0 0 20px var(--neon-blue),
-      0 0 40px var(--neon-blue),
-      0 0 80px var(--neon-blue);
-  }
-  20%, 24%, 55% {       
-    text-shadow: none;
-  }
-}
-
-.neon-button {
-  background: transparent;
-  color: var(--neon-pink);
+.mario-button {
+  background: var(--mario-red);
+  color: #fff;
   font-family: var(--font-family);
   font-size: 1.5rem;
-  font-weight: 600;
+  font-weight: 800;
   padding: 12px 32px;
-  border: 2px solid var(--neon-pink);
+  border: 4px solid #000;
   border-radius: 8px;
   cursor: pointer;
   text-transform: uppercase;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 0 10px var(--neon-pink), inset 0 0 10px var(--neon-pink);
-  text-shadow: 0 0 5px var(--neon-pink);
+  transition: all 0.1s ease;
+  box-shadow: 0 6px 0 #000;
 }
 
-.neon-button:hover {
-  background: var(--neon-pink);
-  color: #000;
-  box-shadow: 0 0 20px var(--neon-pink), inset 0 0 20px var(--neon-pink);
-  text-shadow: none;
+.mario-button:active {
+  transform: translateY(6px);
+  box-shadow: 0 0 0 #000;
 }
 
 .screen-container {

@@ -74,24 +74,24 @@ export const GameCanvas: React.FC = () => {
       />
       
       {gameState === 'dead' && (
-        <div className="screen-container glass-panel" style={{ background: 'rgba(0, 0, 0, 0.5)' }}>
-          <h1 className="mario-title" style={{ color: '#ff3333' }}>GAME OVER</h1>
-          <button className="mario-button" style={{ marginTop: '2rem' }} onClick={() => handleRestart(false)}>TRY AGAIN</button>
+        <div className="screen-container glass-panel" style={{ background: 'rgba(229, 37, 33, 0.4)' }}>
+          <h1 className="mario-title">GAME OVER</h1>
+          <button className="mario-button" style={{ marginTop: '2rem' }} onClick={() => handleRestart(false)}>REBOOT</button>
         </div>
       )}
 
       {gameState === 'won' && (
-        <div className="screen-container glass-panel" style={{ background: 'rgba(0, 0, 0, 0.5)' }}>
-          <h1 className="mario-title" style={{ color: '#ffcc00' }}>LEVEL CLEAR!</h1>
-          <button className="mario-button" style={{ marginTop: '2rem' }} onClick={() => handleRestart(true)}>NEXT LEVEL</button>
+        <div className="screen-container glass-panel" style={{ background: 'rgba(67, 176, 71, 0.4)' }}>
+          <h1 className="mario-title">LEVEL CLEARED</h1>
+          <button className="mario-button" style={{ marginTop: '2rem', background: 'var(--mario-green)' }} onClick={() => handleRestart(true)}>NEXT LEVEL</button>
         </div>
       )}
 
       {gameState === 'completed' && (
-        <div className="screen-container glass-panel" style={{ background: 'rgba(0, 0, 0, 0.5)' }}>
-          <h1 className="mario-title" style={{ color: '#ffcc00' }}>YOU BEAT THE GAME!</h1>
-          <p style={{ color: '#fff', fontSize: '1.2rem', marginTop: '1rem', textShadow: '2px 2px 0 #000', fontWeight: 'bold' }}>Thank you for playing!</p>
-          <button className="mario-button" style={{ marginTop: '2rem' }} onClick={() => { window.location.reload(); }}>PLAY AGAIN</button>
+        <div className="screen-container glass-panel" style={{ background: 'rgba(253, 216, 53, 0.4)' }}>
+          <h1 className="mario-title">SYSTEM CONQUERED</h1>
+          <p style={{ color: '#000', fontSize: '2rem', fontWeight: 800, marginTop: '1rem', textTransform: 'uppercase' }}>You have completed all levels!</p>
+          <button className="mario-button" style={{ marginTop: '2rem', background: 'var(--mario-gold)', color: '#000' }} onClick={() => { window.location.reload(); }}>PLAY AGAIN</button>
         </div>
       )}
     </>

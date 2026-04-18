@@ -203,26 +203,29 @@ export class GameEngine {
     this.prevInput = { ...this.input };
   }
 
-  private drawRectWithGlow(rect: Rect, color: string, glowSize: number = 20) {
-    this.ctx.shadowBlur = glowSize;
-    this.ctx.shadowColor = color;
-    this.ctx.fillStyle = this.ctx.strokeStyle = color;
-    
-    // Draw outline
+  private drawGroundBlock(rect: Rect) {
+    // Mario dirt body
+    this.ctx.fillStyle = '#C84C0C';
+    this.ctx.fillRect(rect.x, rect.y, rect.width, rect.height);
+    // Dark border
+    this.ctx.strokeStyle = '#000000';
     this.ctx.lineWidth = 2;
     this.ctx.strokeRect(rect.x, rect.y, rect.width, rect.height);
     
-    // Fill with slight transparency
-    this.ctx.globalAlpha = 0.2;
-    this.ctx.fillRect(rect.x, rect.y, rect.width, rect.height);
-    this.ctx.globalAlpha = 1.0;
-    this.ctx.shadowBlur = 0;
+    // Grass top
+    this.ctx.fillStyle = '#00AA00';
+    const grassDepth = Math.min(10, rect.height);
+    this.ctx.fillRect(rect.x, rect.y, rect.width, grassDepth);
+    // Dark border for grass line
+    this.ctx.beginPath();
+    this.ctx.moveTo(rect.x, rect.y + grassDepth);
+    this.ctx.lineTo(rect.x + rect.width, rect.y + grassDepth);
+    this.ctx.stroke();
   }
 
-  private drawTriangleWithGlow(x: number, y: number, size: number, up: boolean, color: string) {
-    this.ctx.shadowBlur = 10;
-    this.ctx.shadowColor = color;
-    this.ctx.fillStyle = this.ctx.strokeStyle = color;
+  private drawSpike(x: number, y: number, size: number, up: boolean) {
+    this.ctx.fillStyle = '#E52521'; // Mario red
+    this.ctx.strokeStyle = '#000000';
     this.ctx.lineWidth = 2;
 
     this.ctx.beginPath();
@@ -236,12 +239,23 @@ export class GameEngine {
       this.ctx.lineTo(x + size/2, y + size);
     }
     this.ctx.closePath();
-    this.ctx.stroke();
-
-    this.ctx.globalAlpha = 0.4;
     this.ctx.fill();
-    this.ctx.globalAlpha = 1.0;
-    this.ctx.shadowBlur = 0;
+    this.ctx.stroke();
+  }
+
+  private drawPortal(rect: Rect) {
+    // Classic Mario pipe
+    this.ctx.fillStyle = '#00D000';
+    this.ctx.strokeStyle = '#000000';
+    this.ctx.lineWidth = 2;
+
+    // Body
+    this.ctx.fillRect(rect.x + 4, rect.y, rect.width - 8, rect.height);
+    this.ctx.strokeRect(rect.x + 4, rect.y, rect.width - 8, rect.height);
+    
+    // Lip
+    this.ctx.fillRect(rect.x - 4, rect.y, rect.width + 8, 20);
+    this.ctx.strokeRect(rect.x - 4, rect.y, rect.width + 8, 20);
   }
 
   private drawFunnyHuman(x: number, y: number, w: number, h: number, color: string, vx: number, grounded: boolean, flipped: boolean) {
@@ -353,7 +367,7 @@ export class GameEngine {
 
   private render() {
     // Clear screen
-    this.ctx.fillStyle = '#050510'; // Deep dark background
+    this.ctx.fillStyle = '#5c94fc'; // Light blue sky
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
     if (!this.level) return;
@@ -364,18 +378,18 @@ export class GameEngine {
     // Draw blocks
     for (const b of this.level.blocks) {
       if (b.type === BlockType.WALL) {
-        this.drawRectWithGlow(b, '#00f3ff');
+        this.drawGroundBlock(b);
       } else if (b.type === BlockType.SPIKE_UP) {
-        this.drawTriangleWithGlow(b.x, b.y, b.width, true, '#ff00ea');
+        this.drawSpike(b.x, b.y, b.width, true);
       } else if (b.type === BlockType.SPIKE_DOWN) {
-        this.drawTriangleWithGlow(b.x, b.y, b.width, false, '#ff00ea');
+        this.drawSpike(b.x, b.y, b.width, false);
       } else if (b.type === BlockType.PORTAL) {
-        this.drawRectWithGlow(b, '#00ff66', 30);
+        this.drawPortal(b);
       }
     }
 
     // Draw Player
-    const playerColor = this.player.gravityFlipped ? '#9d00ff' : '#ffffff';
+    const playerColor = this.player.gravityFlipped ? '#E52521' : '#FDD835';
     this.drawFunnyHuman(
       this.player.x, this.player.y, this.player.width, this.player.height,
       playerColor, this.player.vx, this.player.grounded, this.player.gravityFlipped
