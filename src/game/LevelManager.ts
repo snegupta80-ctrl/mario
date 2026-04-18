@@ -31,22 +31,15 @@ export const GAME_LEVELS: LevelData[] = [
       { x: 0, y: 0, width: 2000, height: 100, type: BlockType.WALL },   
       { x: 0, y: 100, width: 50, height: 600, type: BlockType.WALL },     
       
-      // First obstacle: small spike block
-      { x: 400, y: 668, width: 150, height: 32, type: BlockType.SPIKE_UP },
+      // Easy path: small ground pillars to hop across
+      { x: 250, y: 670, width: 40, height: 30, type: BlockType.WALL },
+      { x: 420, y: 670, width: 40, height: 30, type: BlockType.WALL },
+      { x: 590, y: 670, width: 40, height: 30, type: BlockType.WALL },
+      { x: 760, y: 670, width: 40, height: 30, type: BlockType.WALL },
 
-      // Small pillars from start to end for jumping
-      { x: 200, y: 685, width: 50, height: 15, type: BlockType.WALL },
-      { x: 350, y: 685, width: 50, height: 15, type: BlockType.WALL },
-      { x: 500, y: 685, width: 50, height: 15, type: BlockType.WALL },
-      { x: 650, y: 685, width: 50, height: 15, type: BlockType.WALL },
-      { x: 800, y: 685, width: 50, height: 15, type: BlockType.WALL },
-      { x: 950, y: 685, width: 50, height: 15, type: BlockType.WALL },
-      { x: 1100, y: 685, width: 50, height: 15, type: BlockType.WALL },
-      { x: 1250, y: 685, width: 50, height: 15, type: BlockType.WALL },
-      { x: 1400, y: 685, width: 50, height: 15, type: BlockType.WALL },
-      { x: 1550, y: 685, width: 50, height: 15, type: BlockType.WALL },
-
-      { x: 1700, y: 300, width: 64, height: 100, type: BlockType.PORTAL }
+      // Main winning pillar on ground
+      { x: 950, y: 620, width: 60, height: 80, type: BlockType.WALL },
+      { x: 950, y: 580, width: 60, height: 40, type: BlockType.PORTAL }
     ]
   },
   // Level 3: Advanced

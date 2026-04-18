@@ -44,7 +44,7 @@ export class GameEngine {
   // Physics Constants
   private gravity = 1500;
   private moveSpeed = 400;
-  private jumpPower = 600;
+  private jumpPower = 900;
   private maxFallSpeed = 1000;
   private friction = 0.8;
 
@@ -142,7 +142,7 @@ export class GameEngine {
     if (this.player.grounded) {
       if (this.input.tab && justPressedJ) {
         // High Long Jump
-        this.player.vy = this.player.gravityFlipped ? this.jumpPower * 1.6 : -this.jumpPower * 1.6;
+        this.player.vy = this.player.gravityFlipped ? this.jumpPower * 1.8 : -this.jumpPower * 1.8;
         this.player.grounded = false;
       } else if (justPressedJump) {
         // Normal Jump
