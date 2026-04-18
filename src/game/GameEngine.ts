@@ -22,6 +22,8 @@ export class GameEngine {
   public onDie: () => void = () => {};
   public onWin: () => void = () => {};
 
+  public isPaused: boolean = false;
+
   // Player State
   private player = {
     x: 0,
@@ -56,6 +58,7 @@ export class GameEngine {
 
   public loadLevel(level: LevelData) {
     this.level = level;
+    this.isPaused = false;
     this.respawn();
   }
 
@@ -103,7 +106,7 @@ export class GameEngine {
   }
 
   private update(dt: number) {
-    if (!this.level) return;
+    if (!this.level || this.isPaused) return;
 
     // Convert dt to seconds
     const dtSec = dt / 1000;
@@ -148,10 +151,11 @@ export class GameEngine {
           }
           this.player.vx = 0;
         } else if (b.type === BlockType.SPIKE_UP || b.type === BlockType.SPIKE_DOWN) {
+          this.isPaused = true;
           this.onDie();
-          this.respawn();
           return;
         } else if (b.type === BlockType.PORTAL) {
+          this.isPaused = true;
           this.onWin();
           return;
         }
@@ -174,10 +178,11 @@ export class GameEngine {
           }
           this.player.vy = 0;
         } else if (b.type === BlockType.SPIKE_UP || b.type === BlockType.SPIKE_DOWN) {
+           this.isPaused = true;
            this.onDie();
-           this.respawn();
            return;
         } else if (b.type === BlockType.PORTAL) {
+          this.isPaused = true;
           this.onWin();
           return;
         }
